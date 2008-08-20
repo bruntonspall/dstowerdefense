@@ -15,15 +15,15 @@ ARM7_SELECTED = ARM7_BASIC
 #ARM7_SELECTED = ARM7_MIKMOD_DSWIFI
 #USE_EFS = YES
 
-PROGNAME = PAlib
+PROGNAME = DSTowerDefense
 OFILES   +=
 ADD_LIBS +=
 
 PATH 		:= $(DEVKITARM)/bin:$(PATH)
 
-TEXT1 		:= PAlib Project -
-TEXT2 		:= Change this text
-TEXT3 		:= in your Makefile!
+TEXT1 		:= DS Tower Defense
+TEXT2 		:= Michael Brunton-Spall
+TEXT3 		:= (c) 2008 MiBGames
 ICON 		:= -b $(CURDIR)/../logo.bmp
 
 #---------------------------------------------------------------------------------
