@@ -48,14 +48,13 @@ int main(int argc, char ** argv)
   PA_InitText(1,1);
   drawable_t cursor;
   drawable_setup(&cursor, 0, 0, 0);
-  drawable_load(&cursor, 0, 0, pal_cursor, gfx_cursor, OBJ_SIZE_16X16, 1);
+  drawable_load(&cursor, 0, 0, (void*)pal_cursor, (void*)gfx_cursor, OBJ_SIZE_16X16, 1);
   tower_t tower;
   drawable_setup(&tower.drawable, 1, 50, 50);
-  drawable_load(&tower.drawable, 0, 1, pal_tower, gfx_tower, OBJ_SIZE_16X16, 1);
+  drawable_load(&tower.drawable, 0, 1, (void*)pal_tower, (void*)gfx_tower, OBJ_SIZE_16X16, 1);
   PA_SetSpriteRotEnable(0, tower.drawable.sprite, 0);
 
   u16 angle = 0;
-  u8 tick = 0;
 
 	// Infinite loop to keep the program running
 	while (1)
