@@ -240,8 +240,7 @@ $(OUTPUT).elf	:	$(OFILES)
  
 #---------------------------------------------------------------------------------
 %.ds.gba: %.nds
-	@echo built ... $(notdir $@)
-	@dsbuild $< 
+	@dsbuild $< 1>&2 > /dev/null
 ifeq ($(strip $(USE_EFS)), YES)
 	@$(CURDIR)/../efs $(OUTPUT).ds.gba
 endif
@@ -249,10 +248,10 @@ endif
 #---------------------------------------------------------------------------------
 %.nds: %.bin
 ifeq ($(strip $(USE_EFS)), YES)
-	@ndstool -c $@ -9 $(TARGET).bin $(ARM7BIN) $(LOGO) $(ICON) "$(TEXT1);$(TEXT2);$(TEXT3)" -d ../efsroot
+	@ndstool -c $@ -9 $(TARGET).bin $(ARM7BIN) $(LOGO) $(ICON) "$(TEXT1);$(TEXT2);$(TEXT3)" -d ../efsroot 1>&2 > /dev/null
 	@$(CURDIR)/../efs $(OUTPUT).nds
 else
-	@ndstool -c $@ -9 $(TARGET).bin $(ARM7BIN) $(LOGO) $(ICON) "$(TEXT1);$(TEXT2);$(TEXT3)"
+	@ndstool -c $@ -9 $(TARGET).bin $(ARM7BIN) $(LOGO) $(ICON) "$(TEXT1);$(TEXT2);$(TEXT3)" 1>&2 > /dev/null
 endif
 
 #---------------------------------------------------------------------------------
