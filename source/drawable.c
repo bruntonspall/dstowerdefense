@@ -7,7 +7,7 @@ void drawable_setup(drawable_t *drawable, u8 sprite_id, u8 x, u8 y) {
 }
 
 void drawable_load(drawable_t *drawable, u8 screen, u8 palette_num, void * palette_data, void *gfx_data, u8 shape, u8 size, u8 colour_mode) {
-	PA_LoadSpritePal(screen, palette_num, palette_data);
+PA_LoadSpritePal(screen, palette_num, palette_data);
 	PA_CreateSprite(screen, drawable->sprite, gfx_data, shape, size, colour_mode, palette_num, drawable->position.x, drawable->position.y);
 }
 
