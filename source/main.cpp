@@ -55,76 +55,64 @@ const u8 SPRITE_TOWER_BASE = 32;
 const u8 SPRITE_BASE = 0;
 
 void setupRotations() {
-    u16 r;    
+    u16 r;
     for (r = 0; r < 511; r+= 64) {
       PA_SetRotsetNoZoom(0, r/64, r);
     }
 }
 
-typedef struct _tower_list {
-    struct _tower_list * next;
-    tower_t *tower;
-} tower_list_t;
-
-tower_list_t *tower_list_head = 0x00;
-tower_list_t *tower_list_tail = 0x00;
-
-void append_tower(tower_t* t) {
-    tower_list_t *node;
-    if (tower_list_tail == 0x00) {
-        // Empty List
-        node =malloc(sizeof(tower_list_t));
-        tower_list_head = tower_list_tail = node;
-    } else {
-
-    }
-}
+#include <list>
+std::list<Tower> tower_list;
+typedef std::list<Tower>::iterator tlist_it;
 
 // Function: main()
 int main(int argc, char ** argv)
 {
-	PA_Init();    // Initializes PA_Lib
-	PA_InitVBL(); // Initializes a standard VBL
-  PA_InitText(1,1);
-  drawable_t cursor;
-  drawable_setup(&cursor, 0, 0, 0);
-  drawable_load(&cursor, 0, 0, (void*)pal_cursor, (void*)gfx_cursor, OBJ_SIZE_16X16, 1);
-  tower_t *towers = malloc(sizeof(tower_t)*8*8);
-  tower_t *current_tower = towers;
-  setupRotations();
-  u8 i = 0;
-  u8 x = 0;
-  u8 y = 0;
-  for (y = 0; y != 8; ++y) {
-      for (x = 0; x != 8; ++x) {
-          u16 i = y*8+x;
-          if (grid[i] == 1) {
-            drawable_setup(&current_tower->drawable, SPRITE_TOWER_BASE+i, x*16, y*16);
-            drawable_load(&current_tower->drawable, 0, 1, (void*)pal_tower, (void*)gfx_tower, OBJ_SIZE_16X16, 1);
-            //PA_SetSpriteRotEnable(0, current_tower->drawable.sprite, i);
-            current_tower ++;
-          }
-      }
-  }
+    PA_Init();    // Initializes PA_Lib
+    PA_InitVBL(); // Initializes a standard VBL
+    PA_InitText(1,1);
+    Drawable cursor(0,0,0);
+    cursor.Load(0, 0, (void*)pal_cursor, (void*)gfx_cursor, OBJ_SIZE_16X16, 1);
+    setupRotations();
+    u8 c = 0;
+    u8 x = 0;
+    u8 y = 0;
+    for (y = 0; y != 8; ++y) {
+        for (x = 0; x != 8; ++x) {
+            u16 i = y*8+x;
+            if (grid[i] == 1) {
+                Tower tower = Tower(SPRITE_TOWER_BASE+c, x*16, y*16);
+                tower.Load(0, 1, (void*)pal_tower, (void*)gfx_tower, OBJ_SIZE_16X16, 1);
+                tower_list.push_back(tower);
+                PA_SetSpriteRotEnable(0, tower.sprite, c);
+                ++c;
+            }
+        }
+    }
 
-  u16 angle = 0;
-  u16 angle2 = 0;
+    s16 angle = 0;
 
 	// Infinite loop to keep the program running
 	while (1)
 	{
-	    current_tower = towers;
-    for (current_tower = towers; i != 10; ++i) {
-      angle = drawable_get_angle_to(&towers[i].drawable, &cursor);
-    }
-    angle2 = drawable_get_angle_to(&towers[0].drawable, &cursor);
-    PA_OutputText(1, 0, 0, "Angle: %03d", angle);
-    PA_OutputText(1, 0, 1, "Angle2: %03d", angle);
-    PA_OutputText(1, 0, 2, "Cursor: %03d,%03d", cursor.position.x, cursor.position.y);
-		cursor.position.x += (Pad.Held.Right - Pad.Held.Left);
-		cursor.position.y += (Pad.Held.Down - Pad.Held.Up);
-    drawable_draw(&cursor);
-		PA_WaitForVBL();
+	    u8 i = 0;
+        for (tlist_it it = tower_list.begin(); it != tower_list.end(); ++it) {
+            angle = (*it).GetAngleTo(cursor);
+            PA_SetRotsetNoZoom(0, i, angle);
+            ++i;
+        }
+        PA_OutputText(1, 0, 0, "Angle: %03d", angle);
+        PA_OutputText(1, 0, 1, "Angle2: %03d", angle);
+        PA_OutputText(1, 0, 2, "Cursor: %03d,%03d", cursor.position.x, cursor.position.y);
+        if (Stylus.Held) {
+            cursor.position.x = Stylus.X;
+            cursor.position.y = Stylus.Y;
+        } else {
+            cursor.position.x += (Pad.Held.Right - Pad.Held.Left);
+            cursor.position.y += (Pad.Held.Down - Pad.Held.Up);
+        }
+        cursor.Draw();
+        PA_WaitForVBL();
 	}
 
 	return 0;
