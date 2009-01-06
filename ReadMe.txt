@@ -1,26 +1,18 @@
-To use features like mp3 playback or liblobby you have to select an arm7 core for your project.
-You can do this in the "Makefile" - open it with an editor and read the first few lines.
+This is DS Tower Defense, or the beginnings of it anyway.
 
-There are the following features:
----------------------------------
-Sound / Music:
-mp3      - mp3 file playback using Noda's AS_Lib (PAlibExamples\Sound\ASLib_General) - you can always use AS_Lib for sounds, but mp3s only with this option.
-mod      - mod file playback using hitchhikr's modplayer (PAlibExamples\Sound\ModPlayback)
-mikmod   - module playback (mod, s3m, xm, etc.) using Stonebone's libmikmod (PAlibExamples\Sound\MikMod)
+The plan is to make a kick ass tower defense game.
 
-Networking:
-dsWifi   - dsWifi for DS<->AccessPoint connections (PAlibExamples\Wifi\dsWifi)
-libLobby - liblobby for DS<->DS connections (PAlibExamples\Wifi\libLobby) - if you choose this, you must initialize libLobby at the beginning of your program like in the liblobby example, else the arm7 will be stuck
+BUILDING
+========
+To build this project, under linux follow the steps at http://www.palib.info/wiki/doku.php?id=day1#in_linux_we_trust
+I setup my directory in /opt/devkitpro and it contains the PAlib with PAlib 080823, devkitpro b21, and libnds, dswifi and libfat.  I set my PAPATH to /opt/devkitpro/PAlib/lib and my DEVKITPRO to /opt/devkitpro
 
-File structure:
-efs      - EFS_Lib to append a file system to the nds (PAlibExamples\FAT\EFS_Lib) - if you choose this, copy over efsroot and the patcher from the example
----------------------------------
+TODO
+====
 
-You should also replace the project description with something more appropriate. The default is:
-TEXT1 		:= PAlib Project -
-TEXT2 		:= Change this text
-TEXT3 		:= in your Makefile!
+currently the application doesn't really work.  I attempted to add a feature which is not finished.  however you can see the start of what i tried.
+The application will show a number of towers, and they are supposed to rotate to point at the cursor, but actually, they dont rotate at all.
 
-As the last step, consider creating a custom logo.bmp for your project even if your card doesn't show this icon.
-Its size has to be 32x32 and it can have up to 16 colors (color index 0 is transparent).
-If your card doesn't show it, you can use DSOrganize to view it on the DS.
+I am currently rewriting the makefile and sources into C++ as I know the language better.
+
+Michael Brunton-Spall

@@ -55,7 +55,8 @@ const u8 SPRITE_TOWER_BASE = 32;
 const u8 SPRITE_BASE = 0;
 
 void setupRotations() {
-    for (u16 r = 0; r < 511; r+= 64) {
+    u16 r;    
+    for (r = 0; r < 511; r+= 64) {
       PA_SetRotsetNoZoom(0, r/64, r);
     }
 }
@@ -105,9 +106,9 @@ int main(int argc, char ** argv)
           }
       }
   }
-  *current_tower = 0x00
 
   u16 angle = 0;
+  u16 angle2 = 0;
 
 	// Infinite loop to keep the program running
 	while (1)
@@ -116,7 +117,9 @@ int main(int argc, char ** argv)
     for (current_tower = towers; i != 10; ++i) {
       angle = drawable_get_angle_to(&towers[i].drawable, &cursor);
     }
+    angle2 = drawable_get_angle_to(&towers[0].drawable, &cursor);
     PA_OutputText(1, 0, 0, "Angle: %03d", angle);
+    PA_OutputText(1, 0, 1, "Angle2: %03d", angle);
     PA_OutputText(1, 0, 2, "Cursor: %03d,%03d", cursor.position.x, cursor.position.y);
 		cursor.position.x += (Pad.Held.Right - Pad.Held.Left);
 		cursor.position.y += (Pad.Held.Down - Pad.Held.Up);
